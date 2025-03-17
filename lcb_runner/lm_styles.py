@@ -53,6 +53,13 @@ class LanguageModel:
 
 
 LanguageModelList: list[LanguageModel] = [
+    LanguageModel(
+	"/home/bbadger/Desktop/llama-3.1-8b-codeforcescots",
+	"llama-3.1-codeforces",
+	LMStyle.LLaMa3,
+	datetime(2023, 1, 1),
+	link="/home/bbadger/Desktop/llama-3.1-8b-codeforcescots"
+    ),
     ## LLama3 Base (8B and 70B)
     LanguageModel(
         "meta-llama/Meta-Llama-3-70B",
