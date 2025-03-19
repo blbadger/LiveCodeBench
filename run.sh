@@ -1,0 +1,12 @@
+python -m lcb_runner.runner.main \
+--model meta-llama/Meta-Llama-3-8B-Instruct \
+--local_model_path /home/bbadger/experiments/llama-3.1-8b-codeforcescots/model \
+--scenario codegeneration \
+--cot_code_execution \
+--evaluate \
+--dtype float16 \
+--max_tokens 16384 \
+--tensor_parallel_size 4 \
+--n 5 \
+--release_version release_v1 \
+--temperature 0.6
