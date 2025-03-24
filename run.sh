@@ -1,12 +1,12 @@
 python -m lcb_runner.runner.main \
 --model /home/bbadger/Desktop/llama-3.1-8b-codeforcescots-qlora \
---local_model_path /home/bbadger/experiments/llama-3.1-8b-codeforcescots-qlora/merged_model \
+--local_model_path /home/bbadger/experiments/llama-3.1-8b-codeforcescots-qlora-b128/merged_model \
 --scenario codegeneration \
 --cot_code_execution \
 --evaluate \
 --dtype float16 \
---max_tokens 16384 \
+--max_tokens 2048 \
 --tensor_parallel_size 4 \
---n 5 \
+--n 1 \
 --release_version release_v1 \
 --temperature 0.6 #--use_cache
