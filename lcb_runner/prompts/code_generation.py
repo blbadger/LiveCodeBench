@@ -13,6 +13,11 @@ from lcb_runner.benchmarks.code_generation import CodeGenerationProblem
 class PromptConstants:
     SYSTEM_MESSAGE_GENERIC = f"You are an expert Python programmer. You will be given a question (problem specification) and will generate a correct Python program that matches the specification and passes all tests."
 
+    SYSTEM_MESSAGE_GENERIC_COT = (
+        f"You are an expert Python programmer. You will be given a question (problem specification) and will perform chain-of-thought reasoning to generate a correct Python program that matches the specification and passes all tests."
+        f"Enclose the reasoning process in <think> </think> and the answer following this within delimiters."
+        )
+
     SYSTEM_MESSAGE_GEMINI = f"You are an expert Python programmer. You will be given a question (problem specification) and will generate a correct Python program that matches the specification and passes all tests. Do NOT use system calls like `exit` in the generated program. Ensure that the first code block contains the solution."
 
     SYSTEM_MESSAGE_GEMINITHINK = f"You are an expert Python programmer. You will be given a question (problem specification) and will generate a correct Python program that matches the specification and passes all tests."
@@ -35,7 +40,7 @@ class PromptConstants:
     FORMATTING_WITHOUT_STARTER_CODE = "Read the inputs from stdin solve the problem and write the answer to stdout (do not directly test on the sample inputs). Enclose your code within delimiters as follows. Ensure that when the python program runs, it reads the inputs, runs the algorithm and writes output to STDOUT."
 
 
-def get_generic_question_template_answer(question: CodeGenerationProblem):
+def get_generic_question_template_answer(question: CodeGenerationProblem, cot_execution=True):
     prompt = f"### Question:\n{question.question_content}\n\n"
     if question.starter_code:
         prompt += (
@@ -46,6 +51,8 @@ def get_generic_question_template_answer(question: CodeGenerationProblem):
         prompt += f"### Format: {PromptConstants.FORMATTING_WITHOUT_STARTER_CODE}\n"
         prompt += "```python\n# YOUR CODE HERE\n```\n\n"
     prompt += f"### Answer: (use the provided format with backticks)\n\n"
+    if cot_execution:
+        prompt += "<think>"
     return prompt
 
 
@@ -192,7 +199,8 @@ def get_base_model_question_template_answer(question: CodeGenerationProblem):
 
 
 def format_prompt_generation(
-    question: CodeGenerationProblem, LanguageModelStyle: LMStyle
+    question: CodeGenerationProblem, LanguageModelStyle: LMStyle,
+    cot=True
 ) -> str:
     if LanguageModelStyle in [LMStyle.OpenAIChat, LMStyle.DeepSeekAPI]:
         chat_messages = [
@@ -230,16 +238,24 @@ def format_prompt_generation(
         return chat_messages
 
     if LanguageModelStyle == LMStyle.LLaMa3:
-        chat_messages = [
-            {
-                "role": "system",
-                "content": PromptConstants.SYSTEM_MESSAGE_GENERIC,
-            },
-        ]
+        if cot:
+            chat_messages = [
+                {
+                    "role": "system",
+                    "content": PromptConstants.SYSTEM_MESSAGE_GENERIC_COT,
+                },
+            ]
+        else:
+            chat_messages = [
+                {
+                    "role": "system",
+                    "content": PromptConstants.SYSTEM_MESSAGE_GENERIC,
+                },
+            ]
         chat_messages += [
             {
                 "role": "user",
-                "content": get_generic_question_template_answer(question),
+                "content": get_generic_question_template_answer(question, cot),
             },
         ]
         from transformers import AutoTokenizer
