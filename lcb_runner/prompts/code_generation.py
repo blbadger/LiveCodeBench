@@ -15,7 +15,7 @@ class PromptConstants:
 
     SYSTEM_MESSAGE_GENERIC_COT = (
         f"You are an expert Python programmer. You will be given a question (problem specification) and will perform chain-of-thought reasoning to generate a correct Python program that matches the specification and passes all tests."
-        f"Enclose the reasoning process in <think> </think> and the answer following this within delimiters."
+        f"Enclose the reasoning process in <think> </think> and the answer following this within delimiters using the format ```python\n CODE HERE```."
         )
 
     SYSTEM_MESSAGE_GEMINI = f"You are an expert Python programmer. You will be given a question (problem specification) and will generate a correct Python program that matches the specification and passes all tests. Do NOT use system calls like `exit` in the generated program. Ensure that the first code block contains the solution."
@@ -50,7 +50,7 @@ def get_generic_question_template_answer(question: CodeGenerationProblem, cot_ex
     else:
         prompt += f"### Format: {PromptConstants.FORMATTING_WITHOUT_STARTER_CODE}\n"
         prompt += "```python\n# YOUR CODE HERE\n```\n\n"
-    prompt += f"### Answer: (use the provided format with backticks)\n\n"
+    prompt += f"### Answer: (use the provided format with backticks, for example ```python\n YOUR CODE HERE ```)\n\n"
     if cot_execution:
         prompt += "<think>"
     return prompt
