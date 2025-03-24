@@ -1,6 +1,6 @@
 python -m lcb_runner.runner.main \
---model Qwen/Qwen2.5-7B-Instruct \
---local_model_path "/home/bbadger/Desktop/olympic-coder-7b" \
+--model meta-llama/Meta-Llama-3.1-8B-Instruct \
+--local_model_path "/home/bbadger/llama-3.1-8b-codeforcescots-qlora-b128/merged_model" \
 --scenario codegeneration \
 --cot_code_execution \
 --evaluate \
