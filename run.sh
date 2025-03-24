@@ -1,6 +1,6 @@
 python -m lcb_runner.runner.main \
---model /home/bbadger/Desktop/llama-3.1-8b-codeforcescots-qlora \
---local_model_path /home/bbadger/experiments/llama-3.1-8b-codeforcescots-qlora-b128/merged_model \
+--model Qwen/Qwen2.5-7B-Instruct \
+--local_model_path "/home/bbadger/Desktop/olympic-coder-7b" \
 --scenario codegeneration \
 --cot_code_execution \
 --evaluate \
@@ -9,4 +9,7 @@ python -m lcb_runner.runner.main \
 --tensor_parallel_size 4 \
 --n 1 \
 --release_version release_v1 \
---temperature 0.6 --use_cache
+--temperature 0.6 \
+--top_p 0.95
+#--use_cache
+
